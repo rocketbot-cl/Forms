@@ -4,6 +4,7 @@ import json
 import requests
 
 global token
+global server_
 
 module = GetParams('module')
 
@@ -14,10 +15,12 @@ if module == 'Login':
     config.read(ruta_)
     email_ = config.get('USER', 'user')
     pass_ = config.get('USER', 'password')
+    server_ = config.get('NOC', 'server')
+
 
     try:
         data = {'email': email_, 'password': pass_}
-        res = requests.post('https://noc.myrb.io/api/auth/login', data,
+        res = requests.post(server_ + '/api/auth/login', data,
                             headers={'content-type': 'application/x-www-form-urlencoded'})
 
         if res.status_code == 200:
@@ -38,12 +41,11 @@ if module == 'GetForm':
     var_ = GetParams('result')
 
     try:
-        res = requests.post('https://noc.myrb.io/api/formData/get/' + token_,
+        res = requests.post(server_ + '/api/formData/get/' + token_,
                             headers={'Authorization': "Bearer " + token})
         if res.status_code == 200:
             tmp = []
             res = res.json()
-            print('rrr', res)
             if 'data' in res:
                 for data in res['data']:
                     aa = {'id': data['id']}
@@ -62,7 +64,7 @@ if module == 'GetFormData':
     token_ = GetParams('token_')
 
     try:
-        res = requests.post('https://noc.myrb.io/api/formData/getQueue/' + id_ + '/' + token_,
+        res = requests.post(server_ + '/api/formData/getQueue/' + id_ + '/' + token_,
                             headers={'Authorization': "Bearer " + token})
         if res.status_code == 200:
             tmp = []
@@ -82,20 +84,28 @@ if module == 'GetFormData':
 if module == 'SetStatus':
     status_ = GetParams('status_')
     id_ = GetParams('id_')
+    _var = GetParams('result_')
 
     if not id_:
         raise Exception("No form data loaded")
     try:
         s = 0
+        lock = 0
         if status_ == 'done':
             s = 1
-        else:
+        elif status_ == 'undone':
             s = 0
-        data = {'status': s}
-        res = requests.post('https://noc.myrb.io/api/formData/setStatus/' + str(id_), data=data,
+
+        if status_ == 'lock':
+            lock = 1
+        data = {'status': s, 'locked': lock}
+        print('status', data)
+        res = requests.post(server_ + '/api/formData/setStatus/' + str(id_), data=data,
                             headers={'Authorization': "Bearer " + token})
 
         res = res.json()
+        if _var:
+            SetVar(_var, res['success'])
         if not res['success']:
             raise Exception(res['message'])
     except Exception as e:
