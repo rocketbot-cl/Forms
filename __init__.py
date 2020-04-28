@@ -111,3 +111,28 @@ if module == 'SetStatus':
     except Exception as e:
         PrintException()
         raise e
+
+if module == "DownloadFile":
+    id_ = GetParams('id_')
+    download_ = GetParams('download_')
+    save_ = GetParams('save_')
+
+    try:
+        if not id_:
+            raise Exception("No queue ID provided")
+        if not download_:
+            raise Exception("No file to download provided")
+        if not save_:
+            raise Exception("No path to save file provided")
+        
+        data = {'file': download_}
+
+        res = requests.post(server_ + '/api/formData/download/' + str(id_), data=data, headers={'Authorization': "Bearer " + token})
+        if res.status_code == 200:
+            with open(save_, 'wb') as ff:
+                ff.write(res.content)
+        else:
+            raise Exception("Error ocurred while download file")
+    except Exception as e:
+        PrintException()
+        raise e
