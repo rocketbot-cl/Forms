@@ -69,10 +69,16 @@ if module == 'GetFormData':
         if res.status_code == 200:
             tmp = []
             res = res.json()
+            print('RES:',res)
+
             if 'data' in res:
+                if 'user_form_email' in res['data']:
+                    SetVar('user_form_email', res['data']['user_form_email'])
+
+                if 'xperience' in res['data']:
+                    SetVar('xperience', res['data']['xperience'])
                 data = json.loads(res['data']['data'])
                 for attr, value in data.items():
-                    print('*' * 15, 'var', attr, '*' * 15)
                     SetVar(attr, value)
         else:
             raise Exception(res.json()['message'])
@@ -136,3 +142,28 @@ if module == "DownloadFile":
     except Exception as e:
         PrintException()
         raise e
+
+
+if module == "setXperience":
+
+    try:
+        xperience = GetParams('xperience')
+        extradata = GetParams('extradata')
+
+        data = {'xperience': xperience, 'data': extradata}
+
+        res = requests.post(server_ + '/api/form/extra', data=data,
+                            headers={'Authorization': "Bearer " + token})
+
+        if res.status_code != 200:
+            raise Exception('An error has occurred')
+
+    except Exception as e:
+        PrintException()
+        raise e
+
+
+
+
+
+
