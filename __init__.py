@@ -5,6 +5,7 @@ import requests
 
 global token
 global server_
+global proxies
 
 module = GetParams('module')
 
@@ -16,12 +17,14 @@ if module == 'Login':
     email_ = config.get('USER', 'user')
     pass_ = config.get('USER', 'password')
     server_ = config.get('NOC', 'server')
-
+    proxies = eval(GetParams("proxies"))
 
     try:
+
         data = {'email': email_, 'password': pass_}
+
         res = requests.post(server_ + '/api/auth/login', data,
-                            headers={'content-type': 'application/x-www-form-urlencoded'})
+                            headers={'content-type': 'application/x-www-form-urlencoded'}, proxies=proxies)
 
         if res.status_code == 200:
             res = res.json()
@@ -42,7 +45,7 @@ if module == 'GetForm':
 
     try:
         res = requests.post(server_ + '/api/formData/get/' + token_,
-                            headers={'Authorization': "Bearer " + token})
+                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
         if res.status_code == 200:
             tmp = []
             res = res.json()
@@ -50,7 +53,7 @@ if module == 'GetForm':
                 for data in res['data']:
                     aa = {'id': data['id']}
                     tmp.append(aa)
-            
+
             SetVar(var_, tmp)
         else:
             raise Exception(res.json())
@@ -65,11 +68,10 @@ if module == 'GetFormData':
 
     try:
         res = requests.post(server_ + '/api/formData/getQueue/' + id_ + '/' + token_,
-                            headers={'Authorization': "Bearer " + token})
+                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
         if res.status_code == 200:
             tmp = []
             res = res.json()
-            print('RES:',res)
 
             if 'data' in res:
                 if 'user_form_email' in res['data']:
@@ -105,9 +107,8 @@ if module == 'SetStatus':
         if status_ == 'lock':
             lock = 1
         data = {'status': s, 'locked': lock}
-        print('status', data)
         res = requests.post(server_ + '/api/formData/setStatus/' + str(id_), data=data,
-                            headers={'Authorization': "Bearer " + token})
+                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
 
         res = res.json()
         if _var:
@@ -130,10 +131,11 @@ if module == "DownloadFile":
             raise Exception("No file to download provided")
         if not save_:
             raise Exception("No path to save file provided")
-        
+
         data = {'file': download_}
 
-        res = requests.post(server_ + '/api/formData/download/' + str(id_), data=data, headers={'Authorization': "Bearer " + token})
+        res = requests.post(server_ + '/api/formData/download/' + str(id_), data=data,
+                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
         if res.status_code == 200:
             with open(save_, 'wb') as ff:
                 ff.write(res.content)
@@ -142,7 +144,6 @@ if module == "DownloadFile":
     except Exception as e:
         PrintException()
         raise e
-
 
 if module == "setXperience":
 
@@ -153,7 +154,7 @@ if module == "setXperience":
         data = {'xperience': xperience, 'data': extradata}
 
         res = requests.post(server_ + '/api/form/extra', data=data,
-                            headers={'Authorization': "Bearer " + token})
+                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
 
         if res.status_code != 200:
             raise Exception('An error has occurred')
@@ -161,9 +162,3 @@ if module == "setXperience":
     except Exception as e:
         PrintException()
         raise e
-
-
-
-
-
-
