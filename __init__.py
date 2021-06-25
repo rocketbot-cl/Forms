@@ -17,7 +17,10 @@ if module == 'Login':
     email_ = config.get('USER', 'user')
     pass_ = config.get('USER', 'password')
     server_ = config.get('NOC', 'server')
-    proxies = eval(GetParams("proxies"))
+    proxies = GetParams("proxies")
+
+    if proxies != "":
+        proxies = eval(proxies)
 
     try:
 
