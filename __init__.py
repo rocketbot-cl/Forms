@@ -19,7 +19,7 @@ if module == 'Login':
     server_ = config.get('NOC', 'server')
     proxies = GetParams("proxies")
 
-    if proxies != "":
+    if not proxies:
         proxies = eval(proxies)
 
     try:
