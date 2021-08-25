@@ -17,26 +17,31 @@ if module == 'Login':
     email_ = config.get('USER', 'user')
     pass_ = config.get('USER', 'password')
     server_ = config.get('NOC', 'server')
+    apikey_ = config.get('USER', 'apiKey')
     proxies = GetParams("proxies")
 
     if not proxies:
         proxies = eval(proxies)
 
     try:
+        
+        if apikey_ is not None:
+            token = apikey_
 
-        data = {'email': email_, 'password': pass_}
-
-        res = requests.post(server_ + '/api/auth/login', data,
-                            headers={'content-type': 'application/x-www-form-urlencoded'}, proxies=proxies)
-
-        if res.status_code == 200:
-            res = res.json()
-            if res['success']:
-                token = res['data']
-            else:
-                raise Exception(res['message'])
         else:
-            raise Exception(res.json()['message'])
+            data = {'email': email_, 'password': pass_}
+
+            res = requests.post(server_ + '/api/auth/login', data,
+                                headers={'content-type': 'application/x-www-form-urlencoded'}, proxies=proxies)
+            
+            if res.status_code == 200:
+                res = res.json()
+                if res['success']:
+                    token = res['data']
+                else:
+                    raise Exception(res['message'])
+            else:
+                raise Exception(res.json()['message'])
 
     except Exception as e:
         PrintException()
