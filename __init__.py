@@ -17,10 +17,11 @@ if module == 'Login':
     email_ = config.get('USER', 'user')
     pass_ = config.get('USER', 'password')
     server_ = config.get('NOC', 'server')
+
     try:
         apikey_ = config.get('USER', 'apiKey')
     except:
-        pass
+        apikey_ = ""
     proxies = GetParams("proxies")
 
     if not proxies:
@@ -28,7 +29,7 @@ if module == 'Login':
 
     try:
         
-        if apikey_ is not None:
+        if apikey_ != "":
             token = apikey_
 
         else:
