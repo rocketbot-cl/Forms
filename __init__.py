@@ -24,7 +24,7 @@ if module == 'Login':
         apikey_ = ""
     proxies = GetParams("proxies")
 
-    if not proxies:
+    if proxies is not None:
         proxies = eval(proxies)
 
     try:
