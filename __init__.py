@@ -93,6 +93,8 @@ if module == 'GetFormData':
                     SetVar('xperience', res['data']['xperience'])
                 data = json.loads(res['data']['data'])
                 for attr, value in data.items():
+                    # if attr == 'file':
+                    #     value = value.split("/")[-1]
                     SetVar(attr, value)
         else:
             raise Exception(res.json()['message'])
@@ -145,7 +147,12 @@ if module == "DownloadFile":
             raise Exception("No path to save file provided")
 
         data = {'file': download_}
-
+        
+        if "/" in download_:
+            filename = download_.split("/")[-1]
+        if download_ in save_:
+            save_ = save_.replace(download_, filename)
+        
         myDirs = save_.split("/")[:-1]
         if (platform.system() == 'Windows'):
             myDirs[0] = myDirs[0] + "\\"
