@@ -1,6 +1,6 @@
 import configparser
 import json
-
+import platform
 import requests
 
 global token
@@ -145,6 +145,13 @@ if module == "DownloadFile":
             raise Exception("No path to save file provided")
 
         data = {'file': download_}
+
+        myDirs = save_.split("/")[:-1]
+        if (platform.system() == 'Windows'):
+            myDirs[0] = myDirs[0] + "\\"
+        myDirs = os.path.join(*myDirs)
+
+        os.makedirs(myDirs, exist_ok=True)
 
         res = requests.post(server_ + '/api/formData/download/' + str(id_), data=data,
                             headers={'Authorization': "Bearer " + token}, proxies=proxies)
