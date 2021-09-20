@@ -1,11 +1,21 @@
+__version__ = '11.1.1'
+__author__ = 'Rocketbot <contacto@rocketbot.com>'
+
 import configparser
 import json
 import platform
 import requests
 
-global token
-global server_
-global proxies
+
+base_path = tmp_global_obj["basepath"]
+cur_path = base_path + 'modules' + os.sep + 'Forms' + os.sep + 'libs' + os.sep
+if cur_path not in sys.path:
+    sys.path.append(cur_path)
+
+from configurationObject import ConfigObject
+
+global configFormObject
+
 
 module = GetParams('module')
 
@@ -32,6 +42,8 @@ if module == 'Login':
         if apikey_ != "":
             token = apikey_
 
+
+
         else:
             data = {'email': email_, 'password': pass_}
 
@@ -46,6 +58,8 @@ if module == 'Login':
                     raise Exception(res['message'])
             else:
                 raise Exception(res.json()['message'])
+    
+        configFormObject = ConfigObject(token, server_, email_, pass_, apikey_, proxies)
 
     except Exception as e:
         PrintException()
@@ -56,8 +70,8 @@ if module == 'GetForm':
     var_ = GetParams('result')
 
     try:
-        res = requests.post(server_ + '/api/formData/get/' + token_,
-                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
+        res = requests.post(configFormObject.server_ + '/api/formData/get/' + token_,
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
         if res.status_code == 200:
             tmp = []
             res = res.json()
@@ -79,8 +93,8 @@ if module == 'GetFormData':
     token_ = GetParams('token_')
 
     try:
-        res = requests.post(server_ + '/api/formData/getQueue/' + id_ + '/' + token_,
-                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
+        res = requests.post(configFormObject.server_ + '/api/formData/getQueue/' + id_ + '/' + token_,
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
         if res.status_code == 200:
             tmp = []
             res = res.json()
@@ -121,8 +135,8 @@ if module == 'SetStatus':
         if status_ == 'lock':
             lock = 1
         data = {'status': s, 'locked': lock}
-        res = requests.post(server_ + '/api/formData/setStatus/' + str(id_), data=data,
-                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
+        res = requests.post(configFormObject.server_ + '/api/formData/setStatus/' + str(id_), data=data,
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
 
         res = res.json()
         if _var:
@@ -160,8 +174,8 @@ if module == "DownloadFile":
 
         os.makedirs(myDirs, exist_ok=True)
 
-        res = requests.post(server_ + '/api/formData/download/' + str(id_), data=data,
-                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
+        res = requests.post(configFormObject.server_ + '/api/formData/download/' + str(id_), data=data,
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
         if res.status_code == 200:
             with open(save_, 'wb') as ff:
                 ff.write(res.content)
@@ -179,8 +193,8 @@ if module == "setXperience":
 
         data = {'xperience': xperience, 'data': extradata}
 
-        res = requests.post(server_ + '/api/form/extra', data=data,
-                            headers={'Authorization': "Bearer " + token}, proxies=proxies)
+        res = requests.post(configFormObject.server_ + '/api/form/extra', data=data,
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
 
         if res.status_code != 200:
             raise Exception('An error has occurred')
