@@ -5,6 +5,45 @@ Module to read queues and form data from R.O.C
 
 ![alt text](https://raw.githubusercontent.com/rocketbot-cl/Forms/master/example/queues.png)
 
+Como obtener información enviada desde el robot hacia el formulario, agregar este código en la pestaña JS del editor de formulario, tambien agregar la siguiente librería en el campo CDN  ```//cdn.jsdelivr.net/npm/sweetalert2@11```.
+
+Por último activar la opción _Send API_ y agregar en el robot la variable __xperience__ para obtener el token de respuesta 
+
+```js
+$(document).ready(function() {
+    var params = new URLSearchParams(location.search);
+    if (params.has('xperience')) {
+        var interval = null;
+        swal.fire({
+            text: 'Esperando respuesta del Robot...',
+            title: 'Por favor espere',
+            icon: 'info',
+            timer: 15000
+        })
+        interval = setInterval(function() {
+            $.post(
+                '../api/form/getExtra',
+                $.param({
+                    xperience: params.get('xperience')
+                }), {
+                    headers: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                    }
+                }).done(function(data) {
+                if (data.success && data.data) {
+                    swal.fire({
+                        title: 'Respuesta Recibida',
+                        text: data.data
+                    })
+                    clearInterval(interval)
+                }
+            })
+        }, 10000)
+    }
+})
+```
+
+
 ## Updates
 ### 03-Aug-2021
 - Fixed ApiKey Problems
