@@ -16,7 +16,6 @@ from configurationObject import ConfigObject
 
 global configFormObject
 
-
 module = GetParams('module')
 
 if module == 'Login':
