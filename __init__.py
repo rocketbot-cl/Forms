@@ -20,45 +20,16 @@ module = GetParams('module')
 
 if module == 'Login':
     ruta_ = GetParams("ruta_")
-
-    config = configparser.ConfigParser()
-    config.read(ruta_)
-    email_ = config.get('USER', 'user')
-    pass_ = config.get('USER', 'password')
-    server_ = config.get('NOC', 'server')
-
-    try:
-        apikey_ = config.get('USER', 'apiKey')
-    except:
-        apikey_ = ""
     proxies = GetParams("proxies")
-
-    if proxies is not None:
-        proxies = eval(proxies)
-
+    username = GetParams("username")
+    password = GetParams("password")
+    server_url = GetParams("server_url")
+    api_key = GetParams("api_key")
+    proxies = GetParams("proxies")
     try:
-        
-        if apikey_ != "":
-            token = apikey_
-
-
-
-        else:
-            data = {'email': email_, 'password': pass_}
-
-            res = requests.post(server_ + '/api/auth/login', data,
-                                headers={'content-type': 'application/x-www-form-urlencoded'}, proxies=proxies)
-            
-            if res.status_code == 200:
-                res = res.json()
-                if res['success']:
-                    token = res['data']
-                else:
-                    raise Exception(res['message'])
-            else:
-                raise Exception(res.json()['message'])
-    
-        configFormObject = ConfigObject(token, server_, email_, pass_, apikey_, proxies)
+        orchestrator_service = OrchestatorCommon(server=server_url, user=username, password=password, ini_path=ruta_, apikey=api_key)
+        token = orchestrator_service.get_authorization_token()
+        configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, proxies)
 
     except Exception as e:
         PrintException()

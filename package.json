@@ -34,6 +34,80 @@
         "css": "modal-lg",
         "inputs": [
           {
+            "type": "input",
+            "placeholder": "User1",
+            "title": {
+              "es": "Nombre de usuario:",
+              "en": "Username:"
+            },
+            "description": {
+              "es": "Nombre de usuario",
+              "en": "Username"
+            },
+            "id": "username",
+            "css": "col-md-4"
+          },
+          {
+            "type": "input",
+            "placeholder": "Password",
+            "title": {
+              "es": "Contraseña",
+              "en": "Password:"
+            },
+            "description":{
+                "es": "Contraseña del usuario",
+                "en": "User Password"
+                },
+            "id": "password",
+            "css": "col-md-4"
+          },
+          {
+            "type": "input",
+            "placeholder": "https://roc.myrb.io/",
+            "title": {
+              "es": "Servidor",
+              "en": "Server:"
+            },
+            "description":{
+                "es": "URL del servidor donde se conecta",
+                "en": "Server URL"
+                },
+            "id": "server_url",
+            "css": "col-md-4"
+          },
+          {
+            "type": "label",
+            "title": {
+              "es": "-------------------------------------------------------------------------------------------------------",
+              "en": "-------------------------------------------------------------------------------------------------------"
+            },
+            "id": "label",
+            "css": "col-md-12 px-5"
+          },
+          {
+            "type": "input",
+            "placeholder": "224f1e15-aab7-4632-85ce-321938cb096b",
+            "title": {
+              "es": "API Key",
+              "en": "API Key:"
+            },
+            "description":{
+                "es": "API Key para conectarse al servidor",
+                "en": "API Key to connect to the server"
+                },
+            "id": "api_key",
+            "css": "col-md-12"
+          },
+          {
+            "type": "label",
+            "title": {
+              "es": "--------------------------------------------------------------------------------------------------------",
+              "en": "--------------------------------------------------------------------------------------------------------"
+            },
+            "id": "label",
+            "css": "col-md-12 px-5"
+          },
+          {
             "type": "file_select",
             "placeholder": {
               "es": "C:/Users/User/Desktop/noc/noc.ini",
@@ -104,6 +178,10 @@
               "es": "Form Token",
               "en": "Form Token"
             },
+            "description": {
+              "es": "Form Token",
+              "en": "Form Token"
+            },
             "id": "token",
             "css": "col-md-6"
           },
@@ -113,7 +191,7 @@
               "es": "var",
               "en": "var"
             },
-            "help": {
+            "description": {
               "en": "Variable to store result without {}",
               "es": "Variable donde guardar resultado sin {}"
             },
@@ -121,6 +199,7 @@
               "es": "Asignar a variable",
               "en": "Set to var"
             },
+            "remove_vars": true,
             "id": "result",
             "css": "col-md-6"
           }
@@ -165,6 +244,10 @@
               "es": "ID cola de trabajo",
               "en": "Queue ID"
             },
+            "description": {
+              "es": "ID de la cola de trabajo",
+              "en": "Queue ID"
+            },
             "id": "id_",
             "css": "col-md-6"
           },
@@ -176,6 +259,10 @@
             },
             "title": {
               "es": "Form Token",
+              "en": "Form Token"
+            },
+            "description": {
+              "es": "Token del formulario",
               "en": "Form Token"
             },
             "id": "token_",
@@ -222,6 +309,10 @@
               "es": "ID cola de trabajo",
               "en": "Queue ID"
             },
+            "description": {
+              "es": "ID de la cola de trabajo",
+              "en": "Queue ID"
+            },
             "id": "id_",
             "css": "col-md-6"
           },
@@ -231,7 +322,7 @@
               "es": "Archivo",
               "en": "File"
             },
-            "help": {
+            "description": {
               "es": "Variable que tiene la ruta del archivo del formulario",
               "en": "Var that contains file path of queue"
             },
@@ -247,6 +338,10 @@
             "placeholder": {
               "es": "C:\\Rocketbot\\file.ini",
               "en": "C:\\Rocketbot\\file.ini"
+            },
+            "description": {
+              "es": "Ruta donde se guardará el archivo",
+              "en": "Path where file will be saved"
             },
             "id": "save_",
             "css": "col-md-12"
@@ -293,6 +388,10 @@
               {"title":  "Lock", "value": "lock"},
               {"title":  "Undone", "value": "undone"}
             ],
+            "description": {
+              "es": "Seleccione el estado de la cola",
+              "en": "Select the status of the queue"
+            },
             "id": "status_",
             "css": "col-md-4"
           },
@@ -306,6 +405,10 @@
               "es": "ID cola de trabajo",
               "en": "Queue ID"
             },
+            "description": {
+              "es": "Ingrese el ID de la cola de trabajo",
+              "en": "Enter the ID of the queue"
+            },
             "id": "id_",
             "css": "col-md-4"
           },
@@ -315,10 +418,11 @@
               "es": "Asignar a variable",
               "en": "Set to var"
             },
-            "help": {
-              "es": "Nombre de variable sin {}",
-              "en": "Var without {}"
+            "description": {
+              "es": "Nombre de variable sin {} donde se guardara el resultado",
+              "en": "Var without {} where the result will be saved"
             },
+            "remove_vars": true,
             "id": "result_",
             "css": "col-md-4"
           }
@@ -363,12 +467,20 @@
               "es": "Token Xperience",
               "en": "Xperience Token"
             },
+            "description": {
+              "es": "Token de Xperience",
+              "en": "Xperience Token"
+            },
             "id": "xperience",
             "css": "col-md-6"
           },
           {
             "type": "input",
             "title": {
+              "es": "Mensaje a devolver",
+              "en": "Message to return"
+            },
+            "description": {
               "es": "Mensaje a devolver",
               "en": "Message to return"
             },
