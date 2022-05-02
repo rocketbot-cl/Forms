@@ -21,7 +21,7 @@ class OrchestatorCommon:
         self.user = user
         self.password = password
         self.headers = {
-            'FROM': {'content-type': 'application/x-www-form-urlencoded'},
+            'FORM': {'content-type': 'application/x-www-form-urlencoded'},
             'JSON': {'content-type': 'application/json'}
         }
 

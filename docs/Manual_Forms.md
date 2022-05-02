@@ -6,7 +6,7 @@
   
 Module for Rocketbot Forms  
   
-![banner](https://i.imgur.com/XC17kMx.png)
+![banner](imgs/Banner_Forms.png)
 ## Como instalar este módulo
   
 __Descarga__ e __instala__ el contenido en la carpeta 'modules' en la ruta de rocketbot.  
@@ -17,17 +17,12 @@ __Descarga__ e __instala__ el contenido en la carpeta 'modules' en la ruta de ro
 
 ### Login NOC
   
-Login NOC
+Inicie sesión en NOC utilizando unda de las opciones, API Key, archivo noc.ini o credenciales.
 |Parámetros|Descripción|ejemplo|
 | --- | --- | --- |
-|Nombre de usuario|Nombre de usuario|User1|
-|Contraseña|Contraseña del usuario|Password|
-|Servidor|URL del servidor donde se conecta|https://roc.myrb.io/|
-|-------------------------------------------------------------------------------------------------------|||
-|API Key|API Key para conectarse al servidor|224f1e15-aab7-4632-85ce-321938cb096b|
-|--------------------------------------------------------------------------------------------------------|||
-|Ruta Archivo .ini||C:/Users/User/Desktop/noc/noc.ini|
-|Proxies||{"http": "1.111.11.11:2323", "https": "1.111.11.11:2323"}|
+|URL Servidor|URL del servidor a donde se conecta|https://roc.myrb.io/|
+|Seleccione un metodo para conectarse al Orquestador|Opciones para iniciar sesión en R.O.C, se puede usar las credenciales del usuario, API Key o seleccionando archivo noc.ini||
+|Asignar resultado a Variable|Variable donde se almacenara el estado de la conexion, devuelve True si es exitosa o False en el caso contrario|Variable|
 
 ### Obtener cola de trabajo de Forms
   
@@ -44,6 +39,7 @@ Obtener datos de formulario de la cola de trabajo
 | --- | --- | --- |
 |ID cola de trabajo|ID de la cola de trabajo|1|
 |Form Token|Token del formulario|8YWUW8AXAV3UPNKY|
+|Asignar a variable|Variable donde guardar resultado sin {}|var|
 
 ### Descarga archivo
   

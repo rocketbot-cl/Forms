@@ -6,7 +6,7 @@
   
 Module for Rocketbot Forms  
 
-## Howto install this module
+## How to install this module
   
 __Download__ and __install__ the content in 'modules' folder in Rocketbot path  
 
@@ -19,7 +19,7 @@ __Download__ and __install__ the content in 'modules' folder in Rocketbot path
 
 
 1. Login NOC  
-Login NOC
+Login to NOC using one of the options, API Key, noc.ini file, or credentials.
 
 2. Get Form queue  
 Get queues
@@ -38,9 +38,9 @@ Returns a message to the Xperience form
 
 
 
-### Changes
-Tue Aug 3 14:09:16 2021  Merge pull request #1 from DaniloToroL/patch-1
-
+### Updates
+#### 11-Apr-2022
+- Added selector for connection options
 ----
 ### OS
 
