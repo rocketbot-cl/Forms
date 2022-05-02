@@ -5,7 +5,7 @@ import configparser
 import json
 import platform
 import requests
-
+import os
 
 base_path = tmp_global_obj["basepath"]
 cur_path = base_path + 'modules' + os.sep + 'Forms' + os.sep + 'libs' + os.sep
@@ -13,56 +13,71 @@ if cur_path not in sys.path:
     sys.path.append(cur_path)
 
 from configurationObject import ConfigObject
+from orchestator import OrchestatorCommon
 
 global configFormObject
+global path_ini_assetnoc_
 
 module = GetParams('module')
 
 if module == 'Login':
-    ruta_ = GetParams("ruta_")
+    server_ = GetParams("server_url")
+    var_ = GetParams('var_')
+    iframe = GetParams("iframe")
+    iframe = eval(iframe) if iframe is not None else {}
+    username = iframe.get("user", "")
+    password = iframe.get("password", "")
+    api_key = iframe.get("apikey", "")
+    path = iframe.get("path_ini", GetParams("ruta_"))
+    path_ini_assetnoc_ = path
+    # proxies = GetParams("proxies")
 
-    config = configparser.ConfigParser()
-    config.read(ruta_)
-    email_ = config.get('USER', 'user')
-    pass_ = config.get('USER', 'password')
-    server_ = config.get('NOC', 'server')
+    if password and username:
+        try:
+            orchestrator_service = OrchestatorCommon(server=server_, user=username, password=password, ini_path=path, apikey=api_key)
+            if server_ is None:
+                    server_ = orchestrator_service.server
+            token = orchestrator_service.get_authorization_token()
+            headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
+            res = requests.post(server_ + '/api/assets/list',
+                                headers=headers)
+            configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
+            conx = True
+            SetVar(var_, conx) #type: ignore
 
-    try:
-        apikey_ = config.get('USER', 'apiKey')
-    except:
-        apikey_ = ""
-    proxies = GetParams("proxies")
+        except:
+            raise Exception("Password o E-mail incorrectos")
 
-    if proxies is not None:
-        proxies = eval(proxies)
-
-    try:
-        
-        if apikey_ != "":
-            token = apikey_
-
-
-
+    elif api_key:
+                    
+        orchestrator_service = OrchestatorCommon(server=server_, user=username, password=password, ini_path=path, apikey=api_key)
+        if server_ is None:
+            server_ = orchestrator_service.server
+        token = orchestrator_service.get_authorization_token()
+        headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
+        res = requests.post(server_ + '/api/assets/list',
+                            headers=headers)
+        configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
+        if res.status_code != 200:
+            raise Exception("El API Key es incorrecto")
         else:
-            data = {'email': email_, 'password': pass_}
+            conx = True
+        SetVar(var_, conx)
 
-            res = requests.post(server_ + '/api/auth/login', data,
-                                headers={'content-type': 'application/x-www-form-urlencoded'}, proxies=proxies)
-            
-            if res.status_code == 200:
-                res = res.json()
-                if res['success']:
-                    token = res['data']
-                else:
-                    raise Exception(res['message'])
-            else:
-                raise Exception(res.json()['message'])
-    
-        configFormObject = ConfigObject(token, server_, email_, pass_, apikey_, proxies)
-
-    except Exception as e:
-        PrintException()
-        raise e
+    elif path:
+        try:
+            orchestrator_service = OrchestatorCommon(server=server_, user=username, password=password, ini_path=path, apikey=api_key)
+            if server_ is None:
+                server_ = orchestrator_service.server
+            token = orchestrator_service.get_authorization_token()
+            headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
+            res = requests.post(server_ + '/api/assets/list',
+                                headers=headers)
+            configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
+            conx = True
+            SetVar(var_, conx)
+        except:
+            raise Exception("La direccion del archivo .ini es incorrecta")
 
 if module == 'GetForm':
     token_ = GetParams('token')
@@ -70,7 +85,7 @@ if module == 'GetForm':
 
     try:
         res = requests.post(configFormObject.server_ + '/api/formData/get/' + token_,
-                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=None)
         if res.status_code == 200:
             tmp = []
             res = res.json()
@@ -78,13 +93,13 @@ if module == 'GetForm':
                 for data in res['data']:
                     aa = {'id': data['id']}
                     tmp.append(aa)
-
             SetVar(var_, tmp)
         else:
             raise Exception(res.json())
 
     except Exception as e:
         PrintException()
+        print(res.json())
         raise e
 
 if module == 'GetFormData':
@@ -106,8 +121,8 @@ if module == 'GetFormData':
                     SetVar('xperience', res['data']['xperience'])
                 data = json.loads(res['data']['data'])
                 for attr, value in data.items():
-                    # if attr == 'file':
-                    #     value = value.split("/")[-1]
+                    if attr == 'file':
+                        value = value.split("/")[-1]
                     SetVar(attr, value)
         else:
             raise Exception(res.json()['message'])
