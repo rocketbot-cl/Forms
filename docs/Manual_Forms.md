@@ -6,7 +6,7 @@
   
 Module for Rocketbot Forms  
   
-![banner](imgs/Banner_Forms.png)
+![banner](imgs/Banner_Forms.jpg)
 ## Como instalar este módulo
   
 __Descarga__ e __instala__ el contenido en la carpeta 'modules' en la ruta de rocketbot.  
