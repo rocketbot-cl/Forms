@@ -39,7 +39,7 @@ if module == 'Login':
                     server_ = orchestrator_service.server
             token = orchestrator_service.get_authorization_token()
             headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
-            res = requests.post(server_ + '/api/forms/list',
+            res = requests.post(server_ + '/api/formData/all',
                                 headers=headers)
             configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
             conx = True
@@ -58,7 +58,7 @@ if module == 'Login':
             server_ = orchestrator_service.server
         token = orchestrator_service.get_authorization_token()
         headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
-        res = requests.post(server_ + '/api/forms/list',
+        res = requests.post(server_ + '/api/formData/all',
                             headers=headers)
         configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
         if res.status_code != 200:
@@ -75,7 +75,7 @@ if module == 'Login':
                 server_ = orchestrator_service.server
             token = orchestrator_service.get_authorization_token()
             headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
-            res = requests.post(server_ + '/api/forms/list',
+            res = requests.post(server_ + '/api/formData/all',
                                 headers=headers)
             configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
             conx = True
