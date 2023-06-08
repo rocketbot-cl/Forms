@@ -39,13 +39,16 @@ if module == 'Login':
                     server_ = orchestrator_service.server
             token = orchestrator_service.get_authorization_token()
             headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
-            res = requests.post(server_ + '/api/assets/list',
+            res = requests.post(server_ + '/api/forms/list',
                                 headers=headers)
             configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
             conx = True
             SetVar(var_, conx) #type: ignore
 
         except:
+            if res.status_code != 200:
+                exc = res.json()['message'] if res.json()['message'] else "Password o E-mail incorrectos"
+                raise Exception(exc)
             raise Exception("Password o E-mail incorrectos")
 
     elif api_key:
@@ -55,11 +58,12 @@ if module == 'Login':
             server_ = orchestrator_service.server
         token = orchestrator_service.get_authorization_token()
         headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
-        res = requests.post(server_ + '/api/assets/list',
+        res = requests.post(server_ + '/api/forms/list',
                             headers=headers)
         configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
         if res.status_code != 200:
-            raise Exception("El API Key es incorrecto")
+            exc = res.json()['message'] if res.json()['message'] else "El API Key es incorrecto"
+            raise Exception(exc)
         else:
             conx = True
         SetVar(var_, conx)
@@ -71,13 +75,16 @@ if module == 'Login':
                 server_ = orchestrator_service.server
             token = orchestrator_service.get_authorization_token()
             headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
-            res = requests.post(server_ + '/api/assets/list',
+            res = requests.post(server_ + '/api/forms/list',
                                 headers=headers)
             configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
             conx = True
             SetVar(var_, conx)
         except:
-            raise Exception("La direccion del archivo .ini es incorrecta")
+            if res.status_code != 200:
+                exc = res.json()['message'] if res.json()['message'] else "Password o E-mail incorrectos"
+                raise Exception(exc)
+            raise Exception("Password o E-mail incorrectos")
 
 if module == 'GetForm':
     token_ = GetParams('token')
