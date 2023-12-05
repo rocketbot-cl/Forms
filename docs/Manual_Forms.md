@@ -4,65 +4,72 @@
 
 # Rocketbot Xperience
   
-Module for Rocketbot Forms  
+Connect and work with Rocketbot Forms Xperience  
+
+*Read this in other languages: [English](Manual_Forms.md), [Português](Manual_Forms.pr.md), [Español](Manual_Forms.es.md)*
   
 ![banner](imgs/Banner_Forms.jpg)
-## Como instalar este módulo
+## How to install this module
   
-__Descarga__ e __instala__ el contenido en la carpeta 'modules' en la ruta de rocketbot.  
+To install the module in Rocketbot Studio, it can be done in two ways:
+1. Manual: __Download__ the .zip file and unzip it in the modules folder. The folder name must be the same as the module and inside it must have the following files and folders: \__init__.py, package.json, docs, example and libs. If you have the application open, refresh your browser to be able to use the new module.
+2. Automatic: When entering Rocketbot Studio on the right margin you will find the **Addons** section, select **Install Mods**, search for the desired module and press install.  
+
+## Como usar este modulo
 
 
 
-## Descripción de los comandos
+## Description of the commands
 
 ### Login NOC
   
-Inicie sesión en NOC utilizando unda de las opciones, API Key, archivo noc.ini o credenciales.
-|Parámetros|Descripción|ejemplo|
+Login to NOC using one of the options, API Key, noc.ini file, or credentials.
+|Parameters|Description|example|
 | --- | --- | --- |
-|URL Servidor|URL del servidor a donde se conecta|https://roc.myrb.io/|
-|Seleccione un metodo para conectarse al Orquestador|Opciones para iniciar sesión en R.O.C, se puede usar las credenciales del usuario, API Key o seleccionando archivo noc.ini||
-|Asignar resultado a Variable|Variable donde se almacenara el estado de la conexion, devuelve True si es exitosa o False en el caso contrario|Variable|
+|URL Server|Server URL|https://roc.myrb.io/|
+|Select a method to connect to the Orchestrator|Options to login to R.O.C, you can use user credentials, API Key or by selecting noc.ini file||
+|Do not verify SSL certificate|If checked, the submitted request does not verify the SSL certificate.||
+|Assign result to a Variable|Variable where the state of the connection will be stored, returns True if it is successful or False otherwise|Variable|
 
-### Obtener cola de trabajo de Forms
+### Get Form queue
   
-Obtiene las colas de trabajo
-|Parámetros|Descripción|ejemplo|
+Get queues
+|Parameters|Description|example|
 | --- | --- | --- |
 |Form Token|Form Token|8YWUW8AXAV3UPNKY|
-|Asignar a variable|Variable donde guardar resultado sin {}|var|
+|Set to var|Variable to store result without {}|var|
 
-### Obtener datos de Forms
+### Get Form queue data
   
-Obtener datos de formulario de la cola de trabajo
-|Parámetros|Descripción|ejemplo|
+Get form data from queue. It must have as many variables as the form has 'inputs', they must be called like the 'Element ID' of the 'input'.
+|Parameters|Description|example|
 | --- | --- | --- |
-|ID cola de trabajo|ID de la cola de trabajo|1|
-|Form Token|Token del formulario|8YWUW8AXAV3UPNKY|
-|Asignar a variable|Variable donde guardar resultado sin {}|var|
+|Queue ID|Queue ID|1|
+|Form Token|Form Token|8YWUW8AXAV3UPNKY|
+|Set to var|Variable to store result without {}|var|
 
-### Descarga archivo
+### Download Form File
   
-Descarga un archivo subido a un formulario
-|Parámetros|Descripción|ejemplo|
+Download a file uploaded in a form
+|Parameters|Description|example|
 | --- | --- | --- |
-|ID cola de trabajo|ID de la cola de trabajo|1|
-|Archivo|Variable que tiene la ruta del archivo del formulario||
-|Guardar archivo en|Ruta donde se guardará el archivo|C:\Rocketbot\file.ini|
+|Queue ID|Queue ID|1|
+|File|Var that contains file path of queue||
+|Save file to|Path where file will be saved|C:\Rocketbot\file.ini|
 
-### Actualizar estado de la cola Form
+### Update Form queue status
   
-Cambia el estado de la cola
-|Parámetros|Descripción|ejemplo|
+Change status to form queue
+|Parameters|Description|example|
 | --- | --- | --- |
-|Estado|Seleccione el estado de la cola||
-|ID cola de trabajo|Ingrese el ID de la cola de trabajo|1|
-|Asignar a variable|Nombre de variable sin {} donde se guardara el resultado||
+|Status|Select the status of the queue||
+|Queue ID|Enter the ID of the queue|1|
+|Set to var|Var without {} where the result will be saved||
 
-### Devolver Mensaje a Xperience
+### Return Message to Xperience
   
-Devuelve un mensaje al formulario Xperience
-|Parámetros|Descripción|ejemplo|
+Returns a message to the Xperience form
+|Parameters|Description|example|
 | --- | --- | --- |
-|Token Xperience|Token de Xperience|{xperience}|
-|Mensaje a devolver|Mensaje a devolver||
+|Xperience Token|Xperience Token|{xperience}|
+|Message to return|Message to return||
