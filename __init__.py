@@ -1,7 +1,7 @@
 __version__ = '11.1.1'
 __author__ = 'Rocketbot <contacto@rocketbot.com>'
 
-import configparser
+import sys
 import json
 import platform
 import requests
@@ -17,11 +17,13 @@ from orchestator import OrchestatorCommon
 
 global configFormObject
 global path_ini_assetnoc_
+global verify_form
 
 module = GetParams('module')
 
 if module == 'Login':
     server_ = GetParams("server_url")
+    verify_ = GetParams("verify")
     var_ = GetParams('var_')
     iframe = GetParams("iframe")
     iframe = eval(iframe) if iframe is not None else {}
@@ -31,6 +33,11 @@ if module == 'Login':
     path = iframe.get("path_ini", GetParams("ruta_"))
     path_ini_assetnoc_ = path
     # proxies = GetParams("proxies")
+    
+    if verify_ and eval(verify_):
+        verify_form = False
+    else:
+        verify_form = True
 
     if password and username:
         try:
@@ -40,7 +47,7 @@ if module == 'Login':
             token = orchestrator_service.get_authorization_token()
             headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
             res = requests.post(server_ + '/api/assets/list',
-                                headers=headers)
+                                headers=headers, verify=verify_form)
             configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
             conx = True
             SetVar(var_, conx) #type: ignore
@@ -56,7 +63,8 @@ if module == 'Login':
         token = orchestrator_service.get_authorization_token()
         headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
         res = requests.post(server_ + '/api/assets/list',
-                            headers=headers)
+                            headers=headers, verify=verify_form)
+        
         configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
         if res.status_code != 200:
             raise Exception("El API Key es incorrecto")
@@ -72,7 +80,7 @@ if module == 'Login':
             token = orchestrator_service.get_authorization_token()
             headers = {'content-type': 'application/x-www-form-urlencoded','Authorization': 'Bearer {token}'.format(token=token)}
             res = requests.post(server_ + '/api/assets/list',
-                                headers=headers)
+                                headers=headers, verify=verify_form)
             configFormObject = ConfigObject(token, orchestrator_service.server, orchestrator_service.user, orchestrator_service.password, api_key, None)
             conx = True
             SetVar(var_, conx)
@@ -85,7 +93,7 @@ if module == 'GetForm':
 
     try:
         res = requests.post(configFormObject.server_ + '/api/formData/get/' + token_,
-                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=None)
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies, verify=verify_form)
         if res.status_code == 200:
             tmp = []
             res = res.json()
@@ -108,7 +116,7 @@ if module == 'GetFormData':
 
     try:
         res = requests.post(configFormObject.server_ + '/api/formData/getQueue/' + id_ + '/' + token_,
-                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies, verify=verify_form)
         if res.status_code == 200:
             tmp = []
             res = res.json()
@@ -150,7 +158,7 @@ if module == 'SetStatus':
             lock = 1
         data = {'status': s, 'locked': lock}
         res = requests.post(configFormObject.server_ + '/api/formData/setStatus/' + str(id_), data=data,
-                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies, verify=verify_form)
 
         res = res.json()
         if _var:
@@ -189,7 +197,7 @@ if module == "DownloadFile":
         os.makedirs(myDirs, exist_ok=True)
 
         res = requests.post(configFormObject.server_ + '/api/formData/download/' + str(id_), data=data,
-                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies, verify=verify_form)
         if res.status_code == 200:
             with open(save_, 'wb') as ff:
                 ff.write(res.content)
@@ -208,7 +216,7 @@ if module == "setXperience":
         data = {'xperience': xperience, 'data': extradata}
 
         res = requests.post(configFormObject.server_ + '/api/form/extra', data=data,
-                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies)
+                            headers={'Authorization': "Bearer " + configFormObject.token}, proxies=configFormObject.proxies, verify=verify_form)
 
         if res.status_code != 200:
             raise Exception('An error has occurred')
