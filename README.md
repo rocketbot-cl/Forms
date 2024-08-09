@@ -2,7 +2,7 @@
 
 
 
-# Rocketbot Xperience
+# Rocketbot Xperience (Deprecated. Please use [Xperience](https://github.com/rocketbot-cl/Xperience))
   
 Module for Rocketbot Forms  
 
